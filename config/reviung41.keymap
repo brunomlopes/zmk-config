@@ -9,59 +9,192 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 
+
+/*
+ * Temporarily here because nice nano v2 spi is not defined on ZMk Yet
+ * Source: https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/reviung41/boards/nice_nano.overlay
+ * GitHub Issue: https://github.com/zmkfirmware/zmk/issues/885
+ */
+
+#include <dt-bindings/led/led.h>
+&spi1 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	mosi-pin = <6>;
+	// Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
+	sck-pin = <5>;
+	miso-pin = <7>;
+
+	led_strip: ws2812@0 {
+		compatible = "worldsemi,ws2812-spi";
+		label = "WS2812";
+
+		/* SPI */
+		reg = <0>; /* ignored, but necessary for SPI bindings */
+		spi-max-frequency = <4000000>;
+
+		/* WS2812 */
+		chain-length = <11>; /* arbitrary; change at will */
+		spi-one-frame = <0x70>;
+		spi-zero-frame = <0x40>;
+		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+	};
+};
+
+/ {
+	chosen {
+		zmk,underglow = &led_strip;
+	};
+};
+
+#define BASE 0
+#define LOWER 1
+#define RAISE 2
+#define ADJUST 3
+#define NAV 4
+#define FKEYS 5
+#define ADJUST_PLUS 6 
+
+#define KC_BML_ATILDE 
+#define KC_BML_OTILDE 
+#define KC_BML_GRAVE 
+#define KC_BML_ACUTE 
+#define KC_BML_HAT 
+#define KC_BML_TILDE 
+
+/ {
+    macros {
+        bml_atilde: bml_atilde {
+            label = "ZM_bml_atilde";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp BACKSLASH &kp A>
+                ;
+        };
+        bml_otilde: bml_otilde {
+          label = "ZM_bml_otilde";
+          compatible = "zmk,behavior-macro";
+          #binding-cells = <0>;
+          bindings
+              = <&macro_tap &kp BACKSLASH &kp O>
+              ;
+        };
+        bml_tilde: bml_tilde {
+            label = "ZM_bml_tilde";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp BACKSLASH &kp SPACE>
+                ;
+        }; 
+        bml_hat: bml_hat {
+            label = "ZM_bml_hat";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_press &kp LSHFT>
+                , <&macro_tap &kp BACKSLASH>
+                , <&macro_release &kp LSHFT>
+                , <&macro_tap &kp SPACE>
+                ; 
+        }; 
+        bml_acute: bml_acute {
+            label = "ZM_bml_acute";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp RBKT &kp SPACE>
+                ;
+        }; 
+        bml_grave: bml_grave {
+            label = "ZM_bml_grave";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_press &kp LSHFT>
+                , <&macro_tap &kp RBKT>
+                , <&macro_release &kp LSHFT>
+                , <&macro_tap &kp SPACE>
+                ;
+        };
+      };
+};
+
 / {
         keymap {
                 compatible = "zmk,keymap";
-
   default_layer {
-    bindings = <
-      &mt LALT ESC    &kp Q   &kp W   &kp E   &kp R      &kp T               &kp Y   &kp U      &kp I       &kp O     &kp P      &mt LALT RBRC  
-      &mt LCTRL TAB   &kp A   &kp S   &kp D   &kp F      &kp G               &kp H   &kp J      &kp K       &kp L     &kp RET    &mt RCTL BSPC  
-      &kp LSHFT       &kp Z   &kp X   &kp C   &kp V      &kp B               &kp N   &kp M      &kp COMMA   &kp DOT   &kp FSLH   &mt RSHFT RET  
-                                              &kp LALT   &mo 1   &kp SPACE   &mo 2   &kp RALT                                                  
-    >;
-  };      
+    // | LALT|ESC  | Q | W | E |   R   |     T     |               |     Y     |  U  | I | O | P  | LALT|RBRC |
+    // | LCTRL|TAB | A | S | D |   F   |     G     |               |     H     |  J  | K | L | ⮠  | RCTL|BSPC |
+    // |   LSHFT   | Z | X | C |   V   |     B     |               |     N     |  M  | , | . | /  |   RSHFT   |
+    //                         | LCTRL | [m] LOWER | &lt NAV SPACE | [m] RAISE | ALT |                         
 
-                lower_layer {
-// ----------------------------------------------------------------------------------
-// |    |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |    DEL    |
-// |    |  _  |  +  |  {  |  }  | "|" |   | LFT | DWN |  UP | RGT |  `  |     ~     |
-// |    | ESC | GUI | ALT | CAPS|  "  |   | HOME| END | PGUP| PGDN| PRSC| SHFT(RET) |
-//                       |     |     | RET | ADJ |     |
     bindings = <
-      &trans   &kp EXCL    &kp AT        &kp HASH   &kp DLLR   &kp PRCNT             &kp CARET   &kp AMPS   &kp N8      &kp LPAR    &kp RPAR    &kp DEL        
-      &trans   &kp MINUS   &kp KP_PLUS   &kp LBRC   &kp RBRC   &kp PIPE              &kp LEFT    &kp DOWN   &kp UP      &kp RIGHT   &kp GRAVE   &kp TILDE      
-      &trans   &kp ESC     &kp LGUI      &kp LALT   &kp CLCK   &kp DQT               &kp HOME    &kp END    &kp PG_UP   &kp PG_DN   &kp PSCRN   &mt RSHFT RET  
-                                                    &trans     &trans      &kp RET   &mo 3       &trans                                                       
+      &mt LALT ESC    &kp Q   &kp W   &kp E   &kp R       &kp T                       &kp Y       &kp U      &kp I       &kp O     &kp P      &mt LALT RBRC  
+      &mt LCTRL TAB   &kp A   &kp S   &kp D   &kp F       &kp G                       &kp H       &kp J      &kp K       &kp L     &kp RET    &mt RCTL BSPC  
+      &kp LSHFT       &kp Z   &kp X   &kp C   &kp V       &kp B                       &kp N       &kp M      &kp COMMA   &kp DOT   &kp FSLH   &kp RSHFT      
+                                              &kp LCTRL   &mo LOWER   &lt NAV SPACE   &mo RAISE   &kp LALT                                                  
     >;
-                };
+  };
 
-                raise_layer {
-// -----------------------------------------------------------------------------------------
-// |    |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | DEL |
-// |    |  -  |  =  |  [  |  ]  |  \  |   | F1  | F2  | F3  | F4  | F5  | F6  |
-// |    | ESC | GUI | ALT | CAPS|  "  |   | F7  | F8  | F9  | F10 | F11 | F12 |
-//                       |     | ADJ | BKSP |    |     |
-  bindings = <
-      &trans   &kp N1      &kp N2      &kp N3     &kp N4     &kp N5                &kp N6   &kp N7   &kp N8   &kp N9    &kp N0    &kp DEL  
-      &trans   &kp MINUS   &kp EQUAL   &kp LBKT   &kp RBKT   &kp BSLH              &kp F1   &kp F2   &kp F3   &kp F4    &kp F5    &kp F6   
-      &trans   &kp ESC     &kp LGUI    &kp RALT   &kp CLCK   &kp DQT               &kp F7   &kp F8   &kp F9   &kp F10   &kp F11   &kp F12  
-                                                  &trans     &mo 3      &kp BSPC   &trans   &trans                                        
-    >;
-                };
+  lower_layer {
+    // | BSPC |   1   | 2 |     3     | 4 | 5 |    |      6      | 7 |          8           |    9    |    0     |   |
+    // |  ~   |   !   | @ |     #     | $ | % |    |      ^      | & |          #*          |    (    |    )     |   |
+    // |  `   | UNDER | - | RA(KP_N2) | { | [ |    | NON_US_BSLH | ) | LS(NON_US_BACKSLASH) | LS(DOT) | LS(FSLH) |   |
+    //                                |   |   | ⮠  | [m] ADJUST  |   |                                                
 
-                adjust_layer {
-// -----------------------------------------------------------------------------------------
-// | RGB BRI+ | RGB SAT+ | RGB HUE+ | RGB ANI+ |    | RGB TOG |   |  BT1  | BT2 | BT3 | BT4 | BT5 | BT CLR |
-// | RGB BRI- | RGB SAT- | RGB HUE- | RGB ANI- |    |         |   |       |     |     |     |     |        |
-// |          |          |          |          |    |         |   | RESET |     |     |     |     |        |
-//                                              |     |     |     |     |     |
     bindings = <
-      &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG            &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4   &bt BT_CLR  
-      &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &none                      &none          &none          &none          &none          &none          &none       
-      &none             &none             &none             &none             &none    &none                      &reset         &none          &none          &none          &none          &none       
-                                                                              &trans   &trans            &tog 3   &trans         &trans                                                                 
+      &kp BSPC    &kp N1      &kp N2      &kp N3          &kp N4     &kp N5                &kp N6            &kp N7     &kp N8                     &kp N9        &kp N0         &trans  
+      &kp TILDE   &kp EXCL    &kp AT      &kp HASH        &kp DLLR   &kp PRCNT             &kp CARET         &kp AMPS   &kp KP_ASTERISK            &kp LPAR      &kp RPAR       &trans  
+      &kp GRAVE   &kp UNDER   &kp MINUS   &kp RA(KP_N2)   &kp LBRC   &kp LBKT              &kp NON_US_BSLH   &kp RPAR   &kp LS(NON_US_BACKSLASH)   &kp LS(DOT)   &kp LS(FSLH)   &trans  
+                                                          &trans     &trans      &kp RET   &mo ADJUST        &trans                                                                    
     >;
-                };
+  };
+
+  raise_layer {
+    // |  TAB   |  [X]   |     [X]     |   RA(E)   |     [X]     |    [X]     |       |   RA(N8)    |     RA(N9)      | &bml_acute | &bml_grave |  [   |  [X]   |
+    // |  [X]   | RA(N2) |     [X]     |   COLON   |  LS(COMMA)  |  LS(DOT)   |       |   RA(N7)    |     RA(N0)      |     *      |     (      | APOS |   \    |
+    // | LSHIFT |  [X]   | &bml_atilde | SEMICOLON | &bml_otilde |  RA(LBKT)  |       | NON_US_BSLH | LS(NON_US_BSLH) |  &bml_hat  | &bml_tilde |  /   | RSHIFT |
+    //                                             |             | [m] ADJUST | SPACE |             |                 |                                          
+
+    bindings = <
+      &kp TAB      &none        &none         &kp RA(E)       &none           &none                      &kp RA(N8)        &kp RA(N9)            &bml_acute   &bml_grave   &kp LBKT   &none       
+      &none        &kp RA(N2)   &none         &kp COLON       &kp LS(COMMA)   &kp LS(DOT)                &kp RA(N7)        &kp RA(N0)            &kp STAR     &kp LPAR     &kp APOS   &kp BSLH    
+      &kp LSHIFT   &none        &bml_atilde   &kp SEMICOLON   &bml_otilde     &kp RA(LBKT)               &kp NON_US_BSLH   &kp LS(NON_US_BSLH)   &bml_hat     &bml_tilde   &kp FSLH   &kp RSHIFT  
+                                                              &trans          &mo ADJUST     &kp SPACE   &trans            &trans                                                                
+    >;
+  };
+
+  adjust_layer {
+    // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] | rgb TOG |            | bt SEL 0 | bt SEL 1 | bt SEL 2 | bt SEL 3 | bt SEL 4 | bt CLR |
+    // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] |   [X]   |            |   [X]    |   [X]    |   [X]    |   [X]    |   [X]    |  [X]   |
+    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] |   [X]   |            |  &reset  |   [X]    |   [X]    |   [X]    |   [X]    |  [X]   |
+    //                                             |     |         | [t] ADJUST |          |          |                                          
+
+    bindings = <
+      &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                 &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4   &bt BT_CLR  
+      &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &none                           &none          &none          &none          &none          &none          &none       
+      &none             &none             &none             &none             &none    &none                           &reset         &none          &none          &none          &none          &none       
+                                                                              &trans   &trans            &tog ADJUST   &trans         &trans                                                                 
+    >;
+  };
+
+  nav_layer {
+    // | DEL |  F13  |  F14  |  F15  |  F16  |  F19   |    |  PAGE_UP  |   HOME   |    ^     |    END    | LC(DEL) | LC(BSPC) |
+    // | [X] |  F17  |  F18  |  [X]  |  [X]  |  F20   |    | PAGE_DOWN |    <-    |    v     |    ->     |   DEL   |   BSPC   |
+    // | [X] | LC(Z) | LC(X) | LC(C) | LC(V) | LA(F4) |    |    [X]    | LC(LEFT) | LC(DOWN) | LC(RIGHT) |   [X]   |   [X]    |
+    //                               |       |  GUI   |    | &sk RGUI  |          |                                            
+
+    bindings = <
+      &kp DEL   &kp F13     &kp F14     &kp F15     &kp F16     &kp F19               &kp PAGE_UP     &kp HOME       &kp UP         &kp END         &kp LC(DEL)   &kp LC(BSPC)  
+      &none     &kp F17     &kp F18     &none       &none       &kp F20               &kp PAGE_DOWN   &kp LEFT       &kp DOWN       &kp RIGHT       &kp DEL       &kp BSPC      
+      &none     &kp LC(Z)   &kp LC(X)   &kp LC(C)   &kp LC(V)   &kp LA(F4)            &none           &kp LC(LEFT)   &kp LC(DOWN)   &kp LC(RIGHT)   &none         &none         
+                                                    &trans      &kp RGUI     &trans   &sk RGUI        &trans                                                                   
+    >;
+  };
+
+
+        
         };
 };
