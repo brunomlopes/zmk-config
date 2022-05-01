@@ -135,20 +135,31 @@
 };
 
 / {
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+    };
         keymap {
                 compatible = "zmk,keymap";
 
   default_layer {
-    // | LALT|ESC  | Q | W | E |   R   |     T     |               |     Y     |  U  | I | O | P  | LALT|RBRC |
-    // | LCTRL|TAB | A | S | D |   F   |     G     |               |     H     |  J  | K | L | ⮠  | RCTL|BSPC |
-    // |   LSHFT   | Z | X | C |   V   |     B     |               |     N     |  M  | , | . | /  |   RSHFT   |
-    //                         | LCTRL | [m] LOWER | &lt NAV SPACE | [m] RAISE | ALT |                         
+    // | LALT|ESC  | Q | W | E |      R      |     T     |               |     Y     |  U  | I | O | P  | &hm LALT RBKT |
+    // | LCTRL|TAB | A | S | D | &lt FKEYS F |     G     |               |     H     |  J  | K | L | ⮠  |   RCTL|BSPC   |
+    // |   LSHFT   | Z | X | C |      V      |     B     |               |     N     |  M  | , | . | /  |     RSHFT     |
+    //                         |    LCTRL    | [m] LOWER | &lt NAV SPACE | [m] RAISE | ALT |                             
 
     bindings = <
-      &mt LALT ESC    &kp Q   &kp W   &kp E   &kp R       &kp T                       &kp Y       &kp U      &kp I       &kp O     &kp P      &mt LALT RBRC  
-      &mt LCTRL TAB   &kp A   &kp S   &kp D   &kp F       &kp G                       &kp H       &kp J      &kp K       &kp L     &kp RET    &mt RCTL BSPC  
-      &kp LSHFT       &kp Z   &kp X   &kp C   &kp V       &kp B                       &kp N       &kp M      &kp COMMA   &kp DOT   &kp FSLH   &kp RSHFT      
-                                              &kp LCTRL   &mo LOWER   &lt NAV SPACE   &mo RAISE   &kp LALT                                                  
+      &mt LALT ESC    &kp Q   &kp W   &kp E   &kp R         &kp T                       &kp Y       &kp U      &kp I       &kp O     &kp P      &hm LALT RBKT  
+      &mt LCTRL TAB   &kp A   &kp S   &kp D   &lt FKEYS F   &kp G                       &kp H       &kp J      &kp K       &kp L     &kp RET    &mt RCTL BSPC  
+      &kp LSHFT       &kp Z   &kp X   &kp C   &kp V         &kp B                       &kp N       &kp M      &kp COMMA   &kp DOT   &kp FSLH   &kp RSHFT      
+                                              &kp LCTRL     &mo LOWER   &lt NAV SPACE   &mo RAISE   &kp LALT                                                  
     >;
   };
 
@@ -161,7 +172,7 @@
     bindings = <
       &kp BSPC    &kp N1      &kp N2      &kp N3          &kp N4     &kp N5                &kp N6            &kp N7     &kp N8                     &kp N9        &kp N0         &trans  
       &kp TILDE   &kp EXCL    &kp AT      &kp HASH        &kp DLLR   &kp PRCNT             &kp CARET         &kp AMPS   &kp KP_ASTERISK            &kp LPAR      &kp RPAR       &trans  
-      &kp GRAVE   &kp UNDER   &kp MINUS   &kp RA(KP_N2)   &kp LBRC   &kp LBKT              &kp NON_US_BSLH   &kp RPAR   &kp LS(NON_US_BACKSLASH)   &kp LS(DOT)   &kp LS(FSLH)   &trans  
+      &kp GRAVE   &kp UNDER   &kp MINUS   &kp RA(N2)      &kp LBRC   &kp LBKT              &kp NON_US_BSLH   &kp RPAR   &kp LS(NON_US_BACKSLASH)   &kp LS(DOT)   &kp LS(FSLH)   &trans  
                                                           &trans     &trans      &kp RET   &mo ADJUST        &trans                                                                    
     >;
   };
@@ -181,15 +192,15 @@
   };
 
   adjust_layer {
-    // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] |      rgb TOG      |            | bt SEL 0 | bt SEL 1 | bt SEL 2 | bt SEL 3 | bt SEL 4 | bt CLR |
-    // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] | &ext_power EP_ON  |            |   [X]    |   [X]    |   [X]    |   [X]    |   [X]    |  [X]   |
-    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  |   [X]    |   [X]    |   [X]    |   [X]    |  [X]   |
-    //                                             |     |                   | [t] ADJUST |          |          |                                          
+    // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] |      rgb TOG      |            | bt SEL 0 |  bt SEL 1   | bt SEL 2 | bt SEL 3 | bt SEL 4 | bt CLR |
+    // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] | &ext_power EP_ON  |            |   [X]    |     [X]     |   [X]    |   [X]    |   [X]    |  [X]   |
+    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  | &bootloader |   [X]    |   [X]    |   [X]    |  [X]   |
+    //                                             |     |                   | [t] ADJUST |          |             |                                          
 
     bindings = <
       &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4   &bt BT_CLR  
       &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &ext_power EP_ON                  &none          &none          &none          &none          &none          &none       
-      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &none          &none          &none          &none          &none       
+      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &none          &none       
                                                                               &trans   &trans              &tog ADJUST   &trans         &trans                                                                 
     >;
   };
@@ -205,6 +216,20 @@
       &none     &kp F17     &kp F18     &none       &none       &kp F20               &kp PAGE_DOWN   &kp LEFT       &kp DOWN       &kp RIGHT       &kp DEL       &kp BSPC      
       &trans    &kp LC(Z)   &kp LC(X)   &kp LC(C)   &kp LC(V)   &kp LA(F4)            &none           &kp LC(LEFT)   &kp LC(DOWN)   &kp LC(RIGHT)   &none         &trans     
                                                     &trans      &kp RGUI     &trans   &sk RGUI        &trans                                                                   
+    >;
+  };
+
+  f_layer {
+    // | [X] | F1  | F2  | F3  | F4  | F5  |    | F6  | F7  | F8  | F9  | F10 | F11 |
+    // | [X] | [X] | [X] | [X] | [X] | [X] |    | [X] | [X] | [X] | [X] | [X] | F12 |
+    // | [X] | [X] | [X] | [X] | [X] | [X] |    | [X] | [X] | [X] | [X] | [X] | [X] |
+    //                         |     |     |    |     |     |                        
+
+    bindings = <
+      &none   &kp F1   &kp F2   &kp F3   &kp F4   &kp F5            &kp F6   &kp F7   &kp F8   &kp F9   &kp F10   &kp F11  
+      &none   &none    &none    &none    &none    &none             &none    &none    &none    &none    &none     &kp F12  
+      &none   &none    &none    &none    &none    &none             &none    &none    &none    &none    &none     &none    
+                                         &trans   &trans   &trans   &trans   &trans                                       
     >;
   };
         };
