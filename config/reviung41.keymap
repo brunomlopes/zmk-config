@@ -240,13 +240,13 @@
   adjust_layer {
     // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] |      rgb TOG      |            | bt SEL 0 |  bt SEL 1   | bt SEL 2 | bt SEL 3 |    bt SEL 4     |   bt CLR    |
     // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] | &ext_power EP_ON  |            |   [X]    |     [X]     |   [X]    |   [X]    |       [X]       |     [X]     |
-    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  | &bootloader |   [X]    |   [X]    | &tg WINDOWS_MOD | &tg OSX_MOD |
+    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  | &bootloader |   [X]    |   [X]    | &to WINDOWS_MOD | &to OSX_MOD |
     //                                             |     |                   | [t] ADJUST |          |             |                                                      
 
     bindings = <
       &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &bt BT_CLR   
       &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &ext_power EP_ON                  &none          &none          &none          &none          &none             &none        
-      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &tg WINDOWS_MOD   &tg OSX_MOD  
+      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &to WINDOWS_MOD   &to OSX_MOD  
                                                                               &trans   &trans              &tog ADJUST   &trans         &trans                                                                     
     >;
   };
