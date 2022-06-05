@@ -137,6 +137,20 @@
 };
 
 / {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        win_layer {
+            if-layers = <WINDOWS_MOD>;
+            then-layer = <BASE>;
+        };
+        osx_layer {
+            if-layers = <OSX_MOD>;
+            then-layer = <BASE>;
+        };
+    };
+};
+
+/ {
     behaviors {
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
@@ -154,16 +168,16 @@
 
 
   default_layer {
-    // |   | Q | W | E |      R      |     T     |               |     Y     | U | I | O | P  |   |
-    // |   | A | S | D | &lt FKEYS F |     G     |               |     H     | J | K | L | ⮠  |   |
-    // |   | Z | X | C |      V      |     B     |               |     N     | M | , | . | /  |   |
-    //                 |             | [m] LOWER | &lt NAV SPACE | [m] RAISE |   |                 
+    // |   [X]   | Q | W | E |      R      |     T     |               |     Y     |  U  | I | O | P  |   [X]   |
+    // |   [X]   | A | S | D | &lt FKEYS F |     G     |               |     H     |  J  | K | L | ⮠  |   [X]   |
+    // | &LSHIFT | Z | X | C |      V      |     B     |               |     N     |  M  | , | . | /  | &RSHIFT |
+    //                       |     [X]     | [m] LOWER | &lt NAV SPACE | [m] RAISE | [X] |                       
 
     bindings = <
-      &none   &kp Q   &kp W   &kp E   &kp R         &kp T                       &kp Y       &kp U    &kp I       &kp O     &kp P      &none  
-      &none   &kp A   &kp S   &kp D   &lt FKEYS F   &kp G                       &kp H       &kp J    &kp K       &kp L     &kp RET    &none  
-      &none   &kp Z   &kp X   &kp C   &kp V         &kp B                       &kp N       &kp M    &kp COMMA   &kp DOT   &kp FSLH   &none  
-                                       &none        &mo LOWER   &lt NAV SPACE   &mo RAISE   &none                                           
+      &none     &kp Q   &kp W   &kp E   &kp R         &kp T                       &kp Y       &kp U   &kp I       &kp O     &kp P      &none    
+      &none     &kp A   &kp S   &kp D   &lt FKEYS F   &kp G                       &kp H       &kp J   &kp K       &kp L     &kp RET    &none    
+      &LSHIFT   &kp Z   &kp X   &kp C   &kp V         &kp B                       &kp N       &kp M   &kp COMMA   &kp DOT   &kp FSLH   &RSHIFT  
+                                        &none         &mo LOWER   &lt NAV SPACE   &mo RAISE   &none                                            
     >;
   };
 
@@ -224,16 +238,16 @@
   };
 
   adjust_layer {
-    // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] |      rgb TOG      |            | bt SEL 0 |  bt SEL 1   | bt SEL 2 | bt SEL 3 | bt SEL 4 | bt CLR |
-    // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] | &ext_power EP_ON  |            |   [X]    |     [X]     |   [X]    |   [X]    |   [X]    |  [X]   |
-    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  | &bootloader |   [X]    |   [X]    |   [X]    |  [X]   |
-    //                                             |     |                   | [t] ADJUST |          |             |                                          
+    // | rgb BRI+ | rgb SAT+ | rgb HUE+ | rgb ANI+ | [X] |      rgb TOG      |            | bt SEL 0 |  bt SEL 1   | bt SEL 2 | bt SEL 3 |    bt SEL 4     |   bt CLR    |
+    // | rgb BRI- | rgb SAT- | rgb HUE- | rgb ANI- | [X] | &ext_power EP_ON  |            |   [X]    |     [X]     |   [X]    |   [X]    |       [X]       |     [X]     |
+    // |   [X]    |   [X]    |   [X]    |   [X]    | [X] | &ext_power EP_OFF |            |  &reset  | &bootloader |   [X]    |   [X]    | &tg WINDOWS_MOD | &tg OSX_MOD |
+    //                                             |     |                   | [t] ADJUST |          |             |                                                      
 
     bindings = <
-      &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4   &bt BT_CLR  
-      &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &ext_power EP_ON                  &none          &none          &none          &none          &none          &none       
-      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &none          &none       
-                                                                              &trans   &trans              &tog ADJUST   &trans         &trans                                                                 
+      &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &bt BT_CLR   
+      &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &ext_power EP_ON                  &none          &none          &none          &none          &none             &none        
+      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &tg WINDOWS_MOD   &tg OSX_MOD  
+                                                                              &trans   &trans              &tog ADJUST   &trans         &trans                                                                     
     >;
   };
 
