@@ -49,12 +49,14 @@
 };
 
 #define BASE 0
-#define LOWER 1
-#define RAISE 2
-#define ADJUST 3
-#define NAV 4
-#define FKEYS 5
-#define ADJUST_PLUS 6 
+#define WINDOWS_MOD 1
+#define OSX_MOD 2
+#define LOWER 3
+#define RAISE 4
+#define ADJUST 5
+#define NAV 6
+#define FKEYS 7
+#define ADJUST_PLUS 8 
 
 #define KC_BML_ATILDE 
 #define KC_BML_OTILDE 
@@ -149,17 +151,47 @@
         keymap {
                 compatible = "zmk,keymap";
 
+
+
   default_layer {
-    // | LALT|ESC  | Q | W | E |      R      |     T     |               |     Y     |  U  | I | O | P  | &hm LALT RBKT |
-    // | LCTRL|TAB | A | S | D | &lt FKEYS F |     G     |               |     H     |  J  | K | L | ⮠  |   RCTL|BSPC   |
-    // |   LSHFT   | Z | X | C |      V      |     B     |               |     N     |  M  | , | . | /  |     RSHFT     |
-    //                         |    LCTRL    | [m] LOWER | &lt NAV SPACE | [m] RAISE | ALT |                             
+    // |   | Q | W | E |      R      |     T     |               |     Y     | U | I | O | P  |   |
+    // |   | A | S | D | &lt FKEYS F |     G     |               |     H     | J | K | L | ⮠  |   |
+    // |   | Z | X | C |      V      |     B     |               |     N     | M | , | . | /  |   |
+    //                 |             | [m] LOWER | &lt NAV SPACE | [m] RAISE |   |                 
 
     bindings = <
-      &mt LALT ESC    &kp Q   &kp W   &kp E   &kp R         &kp T                       &kp Y       &kp U      &kp I       &kp O     &kp P      &hm LALT RBKT  
-      &mt LCTRL TAB   &kp A   &kp S   &kp D   &lt FKEYS F   &kp G                       &kp H       &kp J      &kp K       &kp L     &kp RET    &mt RCTL BSPC  
-      &kp LSHFT       &kp Z   &kp X   &kp C   &kp V         &kp B                       &kp N       &kp M      &kp COMMA   &kp DOT   &kp FSLH   &kp RSHFT      
-                                              &kp LCTRL     &mo LOWER   &lt NAV SPACE   &mo RAISE   &kp LALT                                                  
+      &none   &kp Q   &kp W   &kp E   &kp R         &kp T                       &kp Y       &kp U    &kp I       &kp O     &kp P      &none  
+      &none   &kp A   &kp S   &kp D   &lt FKEYS F   &kp G                       &kp H       &kp J    &kp K       &kp L     &kp RET    &none  
+      &none   &kp Z   &kp X   &kp C   &kp V         &kp B                       &kp N       &kp M    &kp COMMA   &kp DOT   &kp FSLH   &none  
+                                       &none        &mo LOWER   &lt NAV SPACE   &mo RAISE   &none                                           
+    >;
+  };
+
+  win_layer {
+    // | LALT|ESC  |   |   |   |       |   |    |   |     |   |   |   | &hm LALT RBKT |
+    // | LCTRL|TAB |   |   |   |       |   |    |   |     |   |   |   |   RCTL|BSPC   |
+    // |           |   |   |   |       |   |    |   |     |   |   |   |               |
+    //                         | LCTRL |   |    |   | ALT |                            
+
+    bindings = <
+      &mt LALT ESC    &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &hm LALT RBKT  
+      &mt LCTRL TAB   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &mt RCTL BSPC  
+      &trans          &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
+                                                 &kp LCTRL   &trans   &trans   &trans   &kp LALT                                            
+    >;
+  };
+
+  osx_layer {
+    // | LALT|ESC |   |   |   |       |   |    |   |     |   |   |   | &hm LALT RBKT |
+    // | RGUI|TAB |   |   |   |       |   |    |   |     |   |   |   |   RGUI|BSPC   |
+    // |          |   |   |   |       |   |    |   |     |   |   |   |               |
+    //                        | LCTRL |   |    |   | ALT |                            
+
+    bindings = <
+      &mt LALT ESC   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &hm LALT RBKT  
+      &mt RGUI TAB   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &mt RGUI BSPC  
+      &trans         &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
+                                                &kp LCTRL   &trans   &trans   &trans   &kp LALT                                            
     >;
   };
 
