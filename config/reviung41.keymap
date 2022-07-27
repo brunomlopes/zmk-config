@@ -52,11 +52,13 @@
 #define WINDOWS_MOD 1
 #define OSX_MOD 2
 #define LOWER 3
-#define RAISE 4
-#define ADJUST 5
-#define NAV 6
-#define FKEYS 7
-#define ADJUST_PLUS 8 
+#define LOWER_OSX 4
+#define RAISE 5
+#define RAISE_OSX 6
+#define ADJUST 7
+#define NAV 8
+#define FKEYS 9
+#define ADJUST_PLUS 10
 
 #define KC_BML_ATILDE 
 #define KC_BML_OTILDE 
@@ -77,6 +79,16 @@
               = <&macro_tap &kp BACKSLASH &kp A>
               ;
         };
+        bml_atilde_osx: bml_atilde_osx {
+          label = "ZM_bml_atilde_osx";
+          compatible = "zmk,behavior-macro";
+          #binding-cells = <0>;
+          wait-ms = <30>;
+          tap-ms = <40>;
+          bindings
+              = <&macro_tap &kp APOS &kp A>
+              ;
+        };
         bml_otilde: bml_otilde {
           label = "ZM_bml_otilde";
           compatible = "zmk,behavior-macro";
@@ -95,6 +107,26 @@
           tap-ms = <40>;
           bindings
               = <&macro_tap &kp BACKSLASH &kp SPACE>
+              ;
+        };         
+        bml_otilde_osx: bml_otilde_osx {
+          label = "ZM_bml_otilde_osx";
+          compatible = "zmk,behavior-macro";
+          #binding-cells = <0>;
+          wait-ms = <30>;
+          tap-ms = <40>;
+          bindings
+              = <&macro_tap &kp APOS &kp O>
+              ;
+        };
+        bml_tilde_osx: bml_tilde_osx {
+          label = "ZM_bml_tilde_osx";
+          compatible = "zmk,behavior-macro";
+          #binding-cells = <0>;
+          wait-ms = <30>;
+          tap-ms = <40>;
+          bindings
+              = <&macro_tap &kp APOS &kp SPACE>
               ;
         }; 
         bml_hat: bml_hat {
@@ -146,6 +178,14 @@
         osx_layer {
             if-layers = <OSX_MOD>;
             then-layer = <BASE>;
+        };
+        lower_osx_layer {
+            if-layers = <OSX_MOD LOWER>;
+            then-layer = <LOWER_OSX>;
+        };
+        raise_osx_layer {
+            if-layers = <OSX_MOD RAISE>;
+            then-layer = <RAISE_OSX>;
         };
     };
 };
@@ -208,7 +248,7 @@
                                                 &kp LCTRL   &trans   &trans   &trans   &kp LALT                                            
     >;
   };
-
+  
   lower_layer {
     // | BSPC |   1   | 2 |     3     | 4 | 5 |    |      6      | 7 |          8           |    9    |    0     |   |
     // |  ~   |   !   | @ |     #     | $ | % |    |      ^      | & |          #*          |    (    |    )     |   |
@@ -220,6 +260,15 @@
       &kp TILDE   &kp EXCL    &kp AT      &kp HASH        &kp DLLR   &kp PRCNT             &kp CARET         &kp AMPS   &kp KP_ASTERISK            &kp LPAR      &kp RPAR       &trans  
       &kp GRAVE   &kp UNDER   &kp MINUS   &kp RA(N2)      &kp LBRC   &kp LBKT              &kp NON_US_BSLH   &kp RPAR   &kp LS(NON_US_BACKSLASH)   &kp LS(DOT)   &kp LS(FSLH)   &trans  
                                                           &trans     &trans      &kp RET   &mo ADJUST        &trans                                                                    
+    >;
+  };
+  
+  lower_osx_layer {
+    bindings = <
+      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans  
+      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans  
+      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
+                                 &trans   &trans            &trans            &trans   &trans                                            
     >;
   };
 
@@ -234,6 +283,15 @@
       &none        &kp RA(N2)   &none         &kp COLON       &kp LS(COMMA)   &kp LS(DOT)                &kp RA(N7)        &kp RA(N0)            &kp STAR     &kp LPAR     &kp APOS   &kp BSLH    
       &kp LSHIFT   &none        &bml_atilde   &kp SEMICOLON   &bml_otilde     &kp RA(LBKT)               &kp NON_US_BSLH   &kp LS(NON_US_BSLH)   &bml_hat     &bml_tilde   &kp FSLH   &kp RSHIFT  
                                                               &trans          &mo ADJUST     &kp SPACE   &trans            &trans                                                                
+    >;
+  };
+  
+  raise_osx_layer {
+    bindings = <
+      &trans   &trans   &trans            &trans   &trans               &trans            &trans   &trans     &trans   &trans   &trans   &trans  
+      &trans   &trans   &trans            &trans   &trans               &trans            &kp RA(STAR)   &kp RA(LPAR)     &trans   &trans   &trans   &trans  
+      &trans   &trans   &bml_atilde_osx   &trans   &bml_otilde_osx      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
+                                          &trans      &trans            &trans            &trans   &trans                                            
     >;
   };
 
