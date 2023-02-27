@@ -265,9 +265,9 @@
   
   lower_osx_layer {
     bindings = <
-      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans  
-      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans  
-      &trans   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
+      &trans   &trans   &trans   &trans   &trans            &trans            &trans   &trans     &trans   &trans   &trans   &trans  
+      &trans   &trans   &trans   &trans   &trans            &trans            &trans   &trans     &trans   &trans   &trans   &trans  
+      &trans   &trans   &trans   &trans   &kp RS(EQUAL)     &kp EQUAL            &kp LESS_THAN   &trans     &kp GREATER_THAN   &trans   &trans   &trans         
                                  &trans   &trans            &trans            &trans   &trans                                            
     >;
   };
