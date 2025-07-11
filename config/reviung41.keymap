@@ -28,7 +28,6 @@
 
 	led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-spi";
-		label = "WS2812";
 
 		/* SPI */
 		reg = <0>; /* ignored, but necessary for SPI bindings */
@@ -70,7 +69,6 @@
 / {
     macros {
         bml_atilde: bml_atilde {
-          label = "ZM_bml_atilde";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -80,7 +78,6 @@
               ;
         };
         bml_atilde_osx: bml_atilde_osx {
-          label = "ZM_bml_atilde_osx";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -90,7 +87,6 @@
               ;
         };
         bml_otilde: bml_otilde {
-          label = "ZM_bml_otilde";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -100,7 +96,6 @@
               ;
         };
         bml_tilde: bml_tilde {
-          label = "ZM_bml_tilde";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -110,7 +105,6 @@
               ;
         };         
         bml_otilde_osx: bml_otilde_osx {
-          label = "ZM_bml_otilde_osx";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -120,7 +114,6 @@
               ;
         };
         bml_tilde_osx: bml_tilde_osx {
-          label = "ZM_bml_tilde_osx";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -130,7 +123,6 @@
               ;
         }; 
         bml_hat: bml_hat {
-          label = "ZM_bml_hat";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -143,7 +135,6 @@
               ; 
         }; 
         bml_acute: bml_acute {
-          label = "ZM_bml_acute";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -153,7 +144,6 @@
               ;
         }; 
         bml_grave: bml_grave {
-          label = "ZM_bml_grave";
           compatible = "zmk,behavior-macro";
           #binding-cells = <0>;
           wait-ms = <30>;
@@ -194,7 +184,6 @@
     behaviors {
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
             #binding-cells = <2>;
             tapping-term-ms = <150>;
             quick-tap-ms = <0>;
@@ -229,7 +218,7 @@
 
     bindings = <
       &mt LALT ESC    &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &hm LALT RBKT  
-      &mt LCTRL TAB   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &mt RCTL BSPC  
+      &mt LCTRL TAB   &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &mt RCTRL BSPC  
       &trans          &trans   &trans   &trans   &trans      &trans            &trans   &trans     &trans   &trans   &trans   &trans         
                                                  &kp LCTRL   &trans   &trans   &trans   &kp LALT                                            
     >;
@@ -304,7 +293,7 @@
     bindings = <
       &rgb_ug RGB_BRI   &rgb_ug RGB_SAI   &rgb_ug RGB_HUI   &rgb_ug RGB_EFF   &none    &rgb_ug RGB_TOG                   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &bt BT_CLR   
       &rgb_ug RGB_BRD   &rgb_ug RGB_SAD   &rgb_ug RGB_HUD   &rgb_ug RGB_EFR   &none    &ext_power EP_ON                  &none          &none          &none          &none          &none             &none        
-      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &reset         &bootloader    &none          &none          &to WINDOWS_MOD   &to OSX_MOD  
+      &none             &none             &none             &none             &none    &ext_power EP_OFF                 &sys_reset         &bootloader    &none          &none          &to WINDOWS_MOD   &to OSX_MOD  
                                                                               &trans   &trans              &tog ADJUST   &trans         &trans                                                                     
     >;
   };
